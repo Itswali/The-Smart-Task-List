@@ -34,6 +34,11 @@ const toggleComplete = (index: number) => {
   setTasks(updatedTasks);
 }
 
+const handleDelete = (index: number) => {
+  const filteredTasks = tasks.filter((_, i) => i !== index);
+  setTasks(filteredTasks);
+}
+
   return (
     <div className='ring-1 bg-blue-200 ring-emerald-800 '>
       <form className='flex flex-col items-center gap-5' onSubmit={handleSubmit}>
@@ -72,6 +77,7 @@ const toggleComplete = (index: number) => {
     <span className="text-xs font-semibold px-2 py-1 rounded bg-amber-100 uppercase">
       {item.priority}
     </span>
+    <button onClick={() => handleDelete(index)}>X</button>
   </div>
 ))}
     </div>
