@@ -9,6 +9,7 @@ const [data, setData]= useState({
   priority: "low",
   completed: false
 });
+const [search, setSearch] = useState("");
 const [tasks, setTasks] = useState<any[]>([]);
 
 const handleSubmit = (e: React.FormEvent) => {
@@ -39,6 +40,11 @@ const handleDelete = (index: number) => {
   setTasks(filteredTasks);
 }
 
+const filteredTasks = tasks.filter((task) =>
+  // task.title.toLowerCase().includes(search.toLowerCase()) ||
+  task.priority.toLowerCase().includes(search.toLowerCase())
+);
+
   return (
     <div className='ring-1 bg-blue-200 ring-emerald-800 '>
       <form className='flex flex-col items-center gap-5' onSubmit={handleSubmit}>
@@ -57,27 +63,41 @@ const handleDelete = (index: number) => {
         <button type="submit">Submit</button>
       </form>
 
-      {tasks.map((item, index) => (
+      <div className="p-4 bg-white/50 flex justify-center items-center gap-2">
+  <label className="font-bold">Search:</label>
+  <input
+    type="text"
+    placeholder="Search by title or priority..."
+    className="p-1 ring-1 ring-emerald-800"
+    onChange={(e) => setSearch(e.target.value)}
+  />
+</div>
+     {filteredTasks.map((item, index) => (
   <div key={index} className={`flex items-center justify-between border-b p-3 mb-2 ${item.completed ? 'bg-green-50' : 'bg-white'}`}>
     <div className='flex items-center gap-4'>
-      {/* The Checkbox */}
       <input
         type="checkbox"
         checked={item.completed}
         onChange={() => toggleComplete(index)}
         className="w-5 h-5 cursor-pointer"
       />
-
       <div className={item.completed ? "line-through text-gray-400" : ""}>
         <h4 className='font-bold'>{item.title}</h4>
         <p className='text-sm'>{item.description}</p>
       </div>
     </div>
 
-    <span className="text-xs font-semibold px-2 py-1 rounded bg-amber-100 uppercase">
-      {item.priority}
-    </span>
-    <button onClick={() => handleDelete(index)}>X</button>
+    <div className="flex items-center gap-3">
+      <span className="text-xs font-semibold px-2 py-1 rounded bg-amber-100 uppercase">
+        {item.priority}
+      </span>
+      <button
+        className="text-red-600 font-bold"
+        onClick={() => handleDelete(index)}
+      >
+        X
+      </button>
+    </div>
   </div>
 ))}
     </div>
