@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function CreateTask() {
   const [data, setData] = useState({
@@ -9,7 +9,14 @@ export default function CreateTask() {
   });
 
   const [search, setSearch] = useState("");
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<any[]>(() => {
+    const saved = localStorage.getItem("task-list");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("task-list", JSON.stringify(tasks));
+  }, [tasks]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
