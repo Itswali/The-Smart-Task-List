@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 export default function CreateTask() {
-  const [data, setData] = useState({
+  interface Task {
+    id: string;
+    title: string;
+    description: string;
+    priority: 'low' | 'medium' | 'high';
+    completed: boolean;
+  }
+  const [data, setData] = useState<Omit<Task, 'id'>>({
     title: "",
     description: "",
     priority: "low",
@@ -9,7 +16,7 @@ export default function CreateTask() {
   });
 
   const [search, setSearch] = useState("");
-  const [tasks, setTasks] = useState<any[]>(() => {
+  const [tasks, setTasks] = useState<Task[]>(() => {
     const saved = localStorage.getItem("task-list");
     return saved ? JSON.parse(saved) : [];
   });
@@ -73,7 +80,7 @@ export default function CreateTask() {
                 <select
                   value={data.priority}
                   className="w-full p-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-emerald-500 outline-none cursor-pointer"
-                  onChange={(e) => setData({...data, priority: e.target.value})}
+                  onChange={(e) => setData({...data, priority: e.target.value as  'low' | 'medium' | 'high'})}
                 >
                   <option value="low">Low Priority</option>
                   <option value="medium">Medium Priority</option>
