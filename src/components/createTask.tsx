@@ -20,7 +20,6 @@ export default function CreateTask() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add a unique ID using Date.now() or crypto.randomUUID()
     setTasks([...tasks, { ...data, id: crypto.randomUUID() }]);
     setData({ title: "", description: "", priority: "low", completed: false });
   };
