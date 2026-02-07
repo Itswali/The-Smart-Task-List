@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 
 export default function CreateTask() {
-const [isCompleted, setIsCompleted] = useState(false);
+
 
 const [data, setData]= useState({
   title: "",
   description: "",
   priority: "low",
+  completed: false
 });
 const [tasks, setTasks] = useState<any[]>([]);
 
@@ -19,8 +20,19 @@ const handleSubmit = (e: React.FormEvent) => {
     title: "",
   description: "",
   priority: "low",
+  completed: false,
   });
 };
+
+const toggleComplete = (index: number) => {
+  const updatedTasks = tasks.map((task, i) => {
+    if(i === index) {
+      return {...task, completed: !task.completed };
+    }
+    return task;
+  });
+  setTasks(updatedTasks);
+}
 
   return (
     <div className='ring-1 bg-blue-200 ring-emerald-800 '>
@@ -41,13 +53,27 @@ const handleSubmit = (e: React.FormEvent) => {
       </form>
 
       {tasks.map((item, index) => (
-      <div className='ring-1 ring-black m-3 p-3' key={index}>
-        <h3>{item.title}</h3>
-        <h3>{item.description}</h3>
-        <h3>{item.priority}</h3>
-      </div>
+  <div key={index} className={`flex items-center justify-between border-b p-3 mb-2 ${item.completed ? 'bg-green-50' : 'bg-white'}`}>
+    <div className='flex items-center gap-4'>
+      {/* The Checkbox */}
+      <input
+        type="checkbox"
+        checked={item.completed}
+        onChange={() => toggleComplete(index)}
+        className="w-5 h-5 cursor-pointer"
+      />
 
-      ))}
+      <div className={item.completed ? "line-through text-gray-400" : ""}>
+        <h4 className='font-bold'>{item.title}</h4>
+        <p className='text-sm'>{item.description}</p>
+      </div>
+    </div>
+
+    <span className="text-xs font-semibold px-2 py-1 rounded bg-amber-100 uppercase">
+      {item.priority}
+    </span>
+  </div>
+))}
     </div>
   )
 }
