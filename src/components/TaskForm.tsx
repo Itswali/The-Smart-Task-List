@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Task } from './types';
 
 interface TaskFormProps {
@@ -12,11 +12,15 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
     priority: "low",
     completed: false
   });
-
+  useEffect(() => {
+    titleInputRef.current?.focus();
+  }, []);
+  const titleInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onAddTask(data);
     setData({ title: "", description: "", priority: "low", completed: false });
+
   };
 
   return (
@@ -28,6 +32,7 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
           type="text"
           placeholder="Task Title"
           value={data.title}
+          ref={titleInputRef}
           className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none"
           onChange={(e) => setData({ ...data, title: e.target.value })}
         />
